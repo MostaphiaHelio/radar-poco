@@ -2,28 +2,24 @@ import os
 import requests
 
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 
-url = f"https://api.telegram.org/bot{TOKEN}/getUpdates"
+mensagem = """🤖 RADAR POCO ONLINE!
 
-response = requests.get(url)
-data = response.json()
+✅ GitHub conectado
+✅ Telegram conectado
+✅ Sistema funcionando
 
-print("================================")
-print("RESPOSTA DO TELEGRAM")
-print("================================")
-print(data)
+Agora vamos começar a monitorar os preços dos POCOs. 📱🔥
+"""
 
-if data.get("result"):
-    for update in data["result"]:
-        message = update.get("message")
+url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 
-        if message:
-            chat = message.get("chat")
+dados = {
+    "chat_id": CHAT_ID,
+    "text": mensagem
+}
 
-            if chat:
-                print("================================")
-                print("CHAT ID ENCONTRADO:")
-                print(chat.get("id"))
-                print("================================")
-else:
-    print("NENHUMA MENSAGEM ENCONTRADA")
+resposta = requests.post(url, json=dados)
+
+print(resposta.json())
